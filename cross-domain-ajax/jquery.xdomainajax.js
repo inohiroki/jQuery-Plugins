@@ -16,8 +16,8 @@ jQuery.ajax = (function(_ajax){
         hostname = location.hostname,
         exRegex = RegExp(protocol + '//' + hostname),
         YQL = 'http' + (/^https/.test(protocol)?'s':'') + '://query.yahooapis.com/v1/public/yql?callback=?',
-        query = 'select * from html where url="{URL}" and xpath="*"';
-    
+     	query = 'select * from html where url="{URL}" and xpath="*" and charset="{CHARSET}";'    
+   
     function isExternal(url) {
         return !exRegex.test(url) && /:\/\//.test(url);
     }
@@ -33,7 +33,8 @@ jQuery.ajax = (function(_ajax){
             o.url = YQL;
             o.dataType = 'json';
             
-            o.data = {
+     		query = query.replace('{CHARSET}', (o.charset ? o.charset : 'UTF-8'));
+           o.data = {
                 q: query.replace(
                     '{URL}',
                     url + (o.data ?
